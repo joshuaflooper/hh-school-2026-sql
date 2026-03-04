@@ -68,8 +68,8 @@ CREATE TABLE resumes (
 
 CREATE TABLE responses (
 	response_id serial PRIMARY KEY, 
-	resume_id integer NOT NULL,
-	vacancy_id integer NOT NULL,
+	resume_id integer NOT NULL REFERENCES resumes(resume_id),
+	vacancy_id integer NOT NULL REFERENCES vacancies(vacancy_id),
 	covering_letter text,
 	response_date date DEFAULT now()
 );
