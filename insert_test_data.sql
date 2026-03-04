@@ -409,12 +409,12 @@ FROM vacancies_test_data;
 WITH responses_test_data(
     resume_id,
     vacancy_id,
-    publication_date 
+    response_date 
 ) AS (
     SELECT 
         r.resume_id AS resume_id, 
         v.vacancy_id AS vacancy_id, 
-        r.publication_date AS publication_date
+        r.publication_date + random() * (now() - r.publication_date) AS response_date
     FROM resumes AS r
     INNER JOIN vacancies AS v ON 
         v.area_id = r.area_id
@@ -438,5 +438,5 @@ SELECT
     resume_id,
     vacancy_id,
     'covering_letter_here',
-    publication_date + random() * (now() - publication_date)
+    response_date
 FROM responses_test_data;
