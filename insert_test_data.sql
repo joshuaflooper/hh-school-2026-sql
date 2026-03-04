@@ -3,7 +3,7 @@ WITH employers_test_data(employer_id) AS (
     SELECT generate_series(1, 500) AS employer_id
 )
 INSERT INTO employers(employer_id, organization_name, phone_number)
-SELECT employer_id, 'Рандомная компания ' || employer_id, 'phone_number_here'
+SELECT employer_id, 'Рандомная компания ' || employer_id, 'Номер телефона здесь'
 FROM employers_test_data;
 
 -- Сгенерировать данные о пользователях
@@ -212,7 +212,7 @@ SELECT
 		ELSE  
 			'female'::gender_type
 	END AS gender,
-	'phone_number_here'
+	'Номер телефона здесь'
 FROM users_test_data;
 	
 -- Сгенерировать данные о регионах
@@ -336,15 +336,16 @@ SELECT
     vacancy_id,
     employer_id,
 	area_id,
-    specialization_id,
-    'title_here',
-    'description_here',
+    v.specialization_id,
+    'Вакансия "' || s.specialization_name || '"',
+    'Описание вакансии здесь',
 	required_experience,
 	salary_from,
 	salary_from + salary_delta,
 	payment_frequency,
 	publication_date
-FROM vacancies_test_data;
+FROM vacancies_test_data AS v
+INNER JOIN specializations AS s on v.specialization_id = s.specialization_id;
 
 -- Сгенерировать данные о резюме
 WITH primary_keys_min_max_values(
@@ -363,7 +364,7 @@ WITH primary_keys_min_max_values(
         (SELECT min(specialization_id) FROM specializations) AS min_specialization_id,
         (SELECT max(specialization_id) FROM specializations) AS max_specialization_id
 ),
-vacancies_test_data(
+resumes_test_data(
 	resume_id,
 	user_id,
 	area_id,
@@ -397,13 +398,14 @@ SELECT
     resume_id,
     user_id,
 	area_id,
-    specialization_id,
-    'title_here',
-    'description_here',
+    r.specialization_id,
+    'Резюме "' || s.specialization_name || '"',
+    'Текст резюме здесь',
 	experience,
 	salary_from,
 	publication_date
-FROM vacancies_test_data;
+FROM resumes_test_data AS r
+INNER JOIN specializations AS s ON r.specialization_id = s.specialization_id;
 
 -- Сгенерировать данные об откликах
 WITH responses_test_data(
@@ -414,7 +416,7 @@ WITH responses_test_data(
     SELECT 
         r.resume_id AS resume_id, 
         v.vacancy_id AS vacancy_id, 
-        r.publication_date + random() * (now() - r.publication_date) AS response_date
+        r.publication_date + random() * LEAST((now() - r.publication_date), INTERVAL '1 months') AS response_date
     FROM resumes AS r
     INNER JOIN vacancies AS v ON 
         v.area_id = r.area_id
@@ -437,6 +439,6 @@ INSERT INTO responses(
 SELECT
     resume_id,
     vacancy_id,
-    'covering_letter_here',
+    'Текст сопроводительного письма здесь',
     response_date
 FROM responses_test_data;
