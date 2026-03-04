@@ -298,9 +298,9 @@ vacancies_test_data(
 ) AS (
     SELECT
         generate_series(1, 10000) AS vacancy_id,
-        floor(random() * (max_employer_id - min_employer_id))::int + min_employer_id AS employer_id,
-        floor(random() * (max_area_id - min_area_id))::int + min_area_id AS area_id,
-        floor(random() * (max_specialization_id - min_specialization_id))::int + min_specialization_id AS specialization_id,
+        round(random() * (max_employer_id - min_employer_id))::int + min_employer_id AS employer_id,
+        round(random() * (max_area_id - min_area_id))::int + min_area_id AS area_id,
+        round(random() * (max_specialization_id - min_specialization_id))::int + min_specialization_id AS specialization_id,
         (ARRAY[
             'no'::required_experience_type, 
             'from_1_to_3'::required_experience_type, 
@@ -374,9 +374,9 @@ vacancies_test_data(
 ) AS (
     SELECT
         generate_series(1, 100000) AS resume_id,
-        floor(random() * (max_user_id - min_user_id))::int + 1 + min_user_id AS user_id,
-        floor(random() * (max_area_id - min_area_id))::int + 1 + min_area_id AS area_id,
-        floor(random() * (max_specialization_id - min_specialization_id))::int + 1 + min_specialization_id AS specialization_id,
+        round(random() * (max_user_id - min_user_id))::int + min_user_id AS user_id,
+        round(random() * (max_area_id - min_area_id))::int + min_area_id AS area_id,
+        round(random() * (max_specialization_id - min_specialization_id))::int + min_specialization_id AS specialization_id,
         round(random() * 10)::int AS experience,
         round((random() * 300000)::int, -4) AS salary_from,
         now() - (random() * INTERVAL '3 years') AS publication_date
