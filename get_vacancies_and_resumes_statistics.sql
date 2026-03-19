@@ -1,25 +1,23 @@
-(WITH formatted_date_vacancies(vacancy_id, month, year) AS (
+(WITH formatted_date_vacancies(vacancy_id, date) AS (
     SELECT 
         vacancy_id,
-        extract(month FROM publication_date) AS month,
-        extract(year FROM publication_date) AS year
+        date_trunc('month', publication_date)
     FROM vacancies
 )
-SELECT 'vacancies' AS type, month, year, count(vacancy_id)
+SELECT 'vacancies' AS type, to_char(date, 'MM.YYYY') AS month, count(vacancy_id)
 FROM formatted_date_vacancies
-GROUP BY month, year
+GROUP BY date
 ORDER BY count DESC
 LIMIT 1)
-UNION
-(WITH formatted_date_resumes(resume_id, month, year) AS (
+UNION ALL
+(WITH formatted_date_resumes(resume_id, date) AS (
     SELECT 
         resume_id,
-        extract(month FROM publication_date) AS month,
-        extract(year FROM publication_date) AS year
+        date_trunc('month', publication_date)
     FROM resumes
 )
-SELECT 'resumes' AS type, month, year, count(resume_id)
+SELECT 'resumes' AS type, to_char(date, 'MM.YYYY') AS month, count(resume_id)
 FROM formatted_date_resumes
-GROUP BY month, year
+GROUP BY date
 ORDER BY count DESC
 LIMIT 1);

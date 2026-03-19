@@ -51,7 +51,7 @@ CREATE TABLE vacancies (
 	salary_from integer,
 	salary_to integer,
 	payment_frequency payment_frequency_type NOT NULL,
-	publication_date date DEFAULT now()
+	publication_date date DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE resumes (
@@ -63,7 +63,7 @@ CREATE TABLE resumes (
 	description text NOT NULL,
 	experience integer NOT NULL,
 	salary_from integer,
-	publication_date date DEFAULT now()
+	publication_date date DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE responses (
@@ -71,5 +71,5 @@ CREATE TABLE responses (
 	resume_id integer NOT NULL REFERENCES resumes(resume_id),
 	vacancy_id integer NOT NULL REFERENCES vacancies(vacancy_id),
 	covering_letter text,
-	response_date date DEFAULT now()
+	response_date date DEFAULT CURRENT_DATE
 );
